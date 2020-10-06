@@ -1,0 +1,25 @@
+
+pipeline {
+    
+agent any
+
+    tools {
+        msbuild "3.6.3"
+    }
+        stages {
+
+            stage('Git') {
+                steps {
+                    git 'https://github.com/yosiBenziman/iis-test.git'
+                    }
+                }
+
+            stage('Build') { 
+                steps {
+                   bat "\"${tool 'MSBuild'}\" AspDotNetJenkins.sln /p:DeployOnBuild=true /p:DeployDefaultTarget=WebPublish /p:WebPublishMethod=FileSystem /p:SkipInvalidConfigurations=true /t:build /p:Configuration=Release /p:Platform=\"Any CPU\" /p:DeleteExistingFiles=True /p:publishUrl=c:\\inetpub\\wwwroot"
+                }
+            }
+            
+
+        }
+}
